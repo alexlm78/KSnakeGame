@@ -19,6 +19,14 @@ public partial class MainWindow : Window {
         //{ GridValue.DeadHead, Images.DeadHead }
     };
 
+    private readonly Dictionary<Direction, int> dirToRotation = new()
+    {
+        { Direction.Up, 0 },
+        { Direction.Down, 180 },
+        { Direction.Left, 270 },
+        { Direction.Right, 90 }
+    };
+
     private readonly int rows = 15, cols=15;
     private readonly Image[,] gridImages;
     private GameState gameState;
@@ -91,6 +99,7 @@ public partial class MainWindow : Window {
             for (int c = 0; c < cols; c++) {
                 Image image = new Image();
                 image.Source = Images.Empty;
+                image.RenderTransformOrigin = new Point(0.5, 0.5);
 
                 images[r, c] = image;
                 GameGrid.Children.Add(image);
@@ -103,13 +112,16 @@ public partial class MainWindow : Window {
 
     private void Draw() {
         DrawGrid();
+        DrawSnakeHead();
         ScoreText.Text = $"Score: {gameState.Score}";
     }
 
-    private void DrawGrid() {         
+    private void DrawGrid() {
         for (int r = 0; r < rows; r++)
-            for (int c = 0; c < cols; c++)
+            for (int c = 0; c < cols; c++) {
                 gridImages[r, c].Source = gridValToImage[gameState.Grid[r, c]];
+                gridImages[r, c].RenderTransform = Transform.Identity;
+            }
     }
 
     private async Task ShowCountDown() {
@@ -125,4 +137,12 @@ public partial class MainWindow : Window {
         OverlayText.Text = "Press Any key to restart";
     }
 
+    private void DrawSnakeHead() {
+        Position headPos = gameState.HeadPosition();
+        Image img = gridImages[headPos.Row, headPos.Col];
+        img.Source = Images.Head;
+
+        int rot = dirToRotation[gameState.SnakeDirection];
+        img.RenderTransform = new RotateTransform(rot);
+    }
 }
