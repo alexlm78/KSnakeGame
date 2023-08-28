@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.RightsManagement;
 
 namespace KSnakeGame;
 

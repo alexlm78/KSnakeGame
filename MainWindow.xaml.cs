@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,7 +27,7 @@ public partial class MainWindow : Window {
         { Direction.Right, 90 }
     };
 
-    private readonly int rows = 15, cols=15;
+    private readonly int rows = 20, cols=20;
     private readonly Image[,] gridImages;
     private GameState gameState;
     private bool gameRunning;
@@ -95,6 +94,7 @@ public partial class MainWindow : Window {
         Image[,] images = new Image[rows, cols];
         GameGrid.Rows = rows;
         GameGrid.Columns = cols;
+        GameGrid.Width = GameGrid.Height * (cols / (double)rows);
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -104,8 +104,6 @@ public partial class MainWindow : Window {
 
                 images[r, c] = image;
                 GameGrid.Children.Add(image);
-                //Grid.SetRow(image, r);
-                //Grid.SetColumn(image, c);
             }
         }
         return images;
