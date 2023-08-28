@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.VisualBasic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -132,7 +133,8 @@ public partial class MainWindow : Window {
     }
 
     private async Task ShowGameOver() {
-        await Task.Delay(100);
+        await DrawDeadHeasSnake();
+        await Task.Delay(1000);
         Overlay.Visibility = Visibility.Visible;
         OverlayText.Text = "Press Any key to restart";
     }
@@ -144,5 +146,17 @@ public partial class MainWindow : Window {
 
         int rot = dirToRotation[gameState.SnakeDirection];
         img.RenderTransform = new RotateTransform(rot);
+    }
+
+    private async Task DrawDeadHeasSnake() {
+        List<Position> snakePos = new List<Position>(gameState.SnakePositions());
+
+        for ( int i = 0; i < snakePos.Count; i++)
+        {
+            Position pos = snakePos[i];
+            ImageSource src = (i == 0) ? Images.DeadHead : Images.DeadBody;
+            gridImages[pos.Row, pos.Col].Source = src;
+            await Task.Delay(50);
+        }
     }
 }
